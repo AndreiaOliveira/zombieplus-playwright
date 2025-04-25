@@ -3,21 +3,25 @@
 const { test: base, expect } = require('@playwright/test')
 
 
-const { LoginPage } = require('../pages/LoginPage')
-const { Toast } = require('../pages/Components')
-const { MoviesPage } = require('../pages/MoviesPage')
-const { LandingPage } = require('../pages/LandingPage')
+const { Login } = require('../actions/Login')
+const { Toast } = require('../actions/Components')
+const { Movies } = require('../actions/Movies')
+const { Leads } = require('../actions/Leads')
+
+
 
 const test = base.extend({
     page: async ({ page }, use) => {
-        await use({
-            ...page, //copia do que ja vem do playwrigth 
-            //camada de PO
-            landing: new LandingPage(page),
-            login: new LoginPage(page),
-            movies: new MoviesPage(page),
-            toast: new Toast(page)
-        })
+
+        const context = page //recebe os recursos do playwrigth
+
+        //adiciona objetos que recebem a camada do padrão de "Custom Actions" 
+        context['leads'] = new Leads(page)
+        context['login'] = new Login(page)
+        context['movies'] = new Movies(page)
+        context['toast'] = new Toast(page)
+
+        await use(context)
     }
 })
 

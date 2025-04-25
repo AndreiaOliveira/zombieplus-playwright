@@ -5,7 +5,7 @@ test('deve logar como administrador', async ({ page }) => {
 
     await page.login.visit()
     await page.login.submit('admin@zombieplus.com', 'pwd123')
-    await page.movies.isLoggedIn()
+    await page.login.isLoggedIn()
 
 })
 
