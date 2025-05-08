@@ -7,10 +7,10 @@ export class Login {
         this.page = page
     }
 
-    async do(email, password){
+    async do(email, password, userName){
         this.visit()
         this.submit(email, password)
-        this.isLoggedIn()
+        this.isLoggedIn(userName)
     }
 
     async visit() {
@@ -38,12 +38,19 @@ export class Login {
         await expect(alert).toHaveText(text)
     }
 
-    async isLoggedIn() {
-        //ATUALIZAÇÃO: VIOLANDO O PO PARA USAR O PADRÃO CUSTOM ACTIONS
-        //Função está aqui para seguir o PO puro, visto que para validar se o usuario esta logado é na pagina de movies
-        await this.page.waitForLoadState('networkidle') //espera o trafego de rede acontecer
-        await expect(this.page).toHaveURL('http://localhost:3000/admin/movies')  //espero estar nessa tela ao logar
-        //await expect(this.page).toHaveURL(/.*admin/)  //usando expressão regular (boa pratica) 
+    async isLoggedIn(userName) {
+            // //ATUALIZAÇÃO: VIOLANDO O PO PARA USAR O PADRÃO CUSTOM ACTIONS
+            // //Função está aqui para seguir o PO puro, visto que para validar se o usuario esta logado é na pagina de movies
+            // await this.page.waitForLoadState('networkidle') //espera o trafego de rede acontecer
+            // await expect(this.page).toHaveURL('http://localhost:3000/admin/movies')  //espero estar nessa tela ao logar
+            // //await expect(this.page).toHaveURL(/.*admin/)  //usando expressão regular (boa pratica) 
+
+        
+            // pega a mensagem de boas vindas
+            const loggedUser = this.page.locator('.logged-user')
+            await expect(loggedUser).toHaveText(`Olá, ${userName}`)
+
+
 
     }
 

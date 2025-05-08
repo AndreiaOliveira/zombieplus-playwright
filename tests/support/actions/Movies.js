@@ -15,7 +15,7 @@ export class Movies {
         await this.page.getByRole('button', { name: 'Cadastrar' }).click() //clica no botão de cadastrar
     }
 
-    async create(title, overview, company, release_year) {
+    async create(title, overview, company, release_year, cover, featured) {
 
         await this.goForm()
 
@@ -34,7 +34,17 @@ export class Movies {
         await this.page.locator('#select_year .react-select__indicator').click()
         await this.page.locator('.react-select__option').filter({ hasText: release_year }).click() //seleciona o ano
 
+        await this.page.locator('input[name=cover]')
+            .setInputFiles('tests/support/fixtures/covers/movies/' + cover) // upload da imagem
+
+        if (featured) {   //se o filme tiver featured = true deixa ele em destaque 
+            await this.page.locator('.featured .react-switch').click();
+        }
+
         await this.submit()
+
+
+
 
     }
 

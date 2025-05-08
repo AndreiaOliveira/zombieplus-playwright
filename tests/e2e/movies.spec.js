@@ -9,18 +9,32 @@ test('deve poder cadastrar um novo filme', async ({ page }) => {
 
 
     //Logo na aplicação como admin, reutilizando o codigo 
-    await page.login.do('admin@zombieplus.com', 'pwd123')
+    await page.login.do('admin@zombieplus.com', 'pwd123', 'Admin')
 
 
-    await page.movies.create(movie.title, movie.overview, movie.company, movie.release_year)
+    await page.movies.create(movie.title, movie.overview, movie.company, movie.release_year, movie.cover, movie.featured)
 
     await page.toast.containText('Cadastro realizado com sucesso!')
 
 })
 
+test('não deve cadastrar quando um título já existe', async ({ page }) => {
+
+    const movie = data.duplicate
+
+    await page.login.do('admin@zombieplus.com', 'pwd123', 'Admin')
+
+    await page.movies.create(movie.title, movie.overview, movie.company, movie.release_year, movie.cover, movie.featured)
+    await page.toast.containText('Cadastro realizado com sucesso!')
+    
+    await page.movies.create(movie.title, movie.overview, movie.company, movie.release_year, movie.cover, movie.featured)
+    await page.toast.containText('Oops!Este conteúdo já encontra-se cadastrado no catálogo')
+
+})
+
 test('não deve cadastrar quando os campos obrigatórios não são preenchidos', async ({ page }) => {
 
-    await page.login.do('admin@zombieplus.com', 'pwd123')
+    await page.login.do('admin@zombieplus.com', 'pwd123', 'Admin')
 
     await page.movies.goForm()
     await page.movies.submit()
@@ -32,6 +46,8 @@ test('não deve cadastrar quando os campos obrigatórios não são preenchidos',
         'Por favor, informe o ano de lançamento.'
 
     ])
+
+
 
 
 })
