@@ -8,9 +8,9 @@ export class Login {
     }
 
     async do(email, password, userName){
-        this.visit()
-        this.submit(email, password)
-        this.isLoggedIn(userName)
+        await this.visit()
+        await this.submit(email, password)
+        await this.isLoggedIn(userName)
     }
 
     async visit() {
@@ -29,13 +29,13 @@ export class Login {
 
 
     async alertEmailHaveText(text){
-        const alert = this.page.locator('.email-alert')
-        await expect(alert).toHaveText(text)
+         const alert = this.page.locator('.alert').nth(0);
+         await expect(alert).toHaveText(text);
     }
 
     async alertPasswordHaveText(text){
-        const alert = this.page.locator('.password-alert')
-        await expect(alert).toHaveText(text)
+    const alert = this.page.locator('.alert').filter({ hasText: 'Campo obrigatório' }); 
+    await expect(alert).toHaveText('Campo obrigatório');    
     }
 
     async isLoggedIn(userName) {
