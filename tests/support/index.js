@@ -1,5 +1,7 @@
 //motivo desse arquivo: facilitar o page objects
 
+
+
 const { test: base, expect } = require('@playwright/test')
 
 
@@ -7,6 +9,7 @@ const { Login } = require('./actions/Login')
 const { Popup } = require('./actions/Components')
 const { Movies } = require('./actions/Movies')
 const { Leads } = require('./actions/Leads')
+const { Series} = require('./actions/Tvshows')
 
 const { Api } = require('./api')
 
@@ -22,6 +25,7 @@ const test = base.extend({
         context['login'] = new Login(page)
         context['movies'] = new Movies(page)
         context['popup'] = new Popup(page)
+        context['series'] = new Series(page)
 
         await use(context)
     },

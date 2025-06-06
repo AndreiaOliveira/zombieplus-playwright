@@ -7,6 +7,7 @@ export class Api {
     }
 
 
+
     async setToken() {
 
         const response = await this.request.post('http://localhost:3333/sessions', {
@@ -69,6 +70,37 @@ export class Api {
         })
 
         expect(response.ok()).toBeTruthy()
+
+
+    }
+
+    async postSerie(serie) {
+        const path = require('path');
+        const fs = require('fs');
+        const companyId = await this.getCompanyIdByName(serie.company);
+
+        const filePath = path.resolve('tests', 'support', 'fixtures', 'covers', 'tvshows', serie.cover);
+
+        const response = await this.request.post('http://localhost:3333/tvshows', {
+            headers: {
+                Authorization: this.token,
+                Accept: 'application/json, text/plain, */*'
+            },
+            multipart: {
+                title: serie.title,
+                overview: serie.overview,
+                company_id: companyId,
+                release_year: String(serie.release_year),
+                featured: String(serie.featured),
+                seasons: String(serie.season), 
+                cover: fs.createReadStream(filePath)
+            }
+        });
+
+        const body = await response.text(); // opcional para debug
+        console.log(body); // imprime se ainda der erro
+
+        expect(response.ok(), `Erro ao criar série: ${body}`).toBeTruthy();
 
 
     }
